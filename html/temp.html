@@ -1,18 +1,26 @@
+<!DOCTYPE html>
 <html>
 <head>
 <script type="text/javascript" src="dygraph-combined.js"></script>
 </head>
 <body>
-<div id="graphdiv" style="width:750px; height:400px;"></div>
+<div id="main">
+<div id="graphdiv1" style="width:750px; height:400px; margin: 50px; "></div>
+<div id="graphdiv2" style="width:750px; height:400px; margin: 50px; "></div>
+<div id="graphdiv3" style="width:750px; height:400px; margin: 50px; "></div>
+<div id="graphdiv4" style="width:750px; height:400px; margin: 50px; "></div>
+<div id="graphdiv5" style="width:750px; height:400px; margin: 50px; "></div>
+</div>
+
 <script type="text/javascript">
- 
+
   function addZero(num)
   {
     var s=num+"";
     if (s.length < 2) s="0"+s;
     return s;
   }
- 
+
   function dateFormat(indate)
   {
     var hh = addZero(indate.getHours());
@@ -23,35 +31,99 @@
     var yyyy = addZero(indate.getFullYear());
     return dd+'/'+mm+' '+hh+':'+MM;
   }
- 
-  g = new Dygraph(
-    document.getElementById("graphdiv"),
-    "temp.log",
-    {
-      xValueParser: function(x) {
-        var date = new Date(x.replace(
-          /^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/,
-          '$4:$5:$6 $2/$3/$1'
-        ));
-        return date.getTime();
+
+  function dateParse(x)
+  {
+    var date = new Date(x.replace(
+      /^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/,
+      '$4:$5:$6 $2/$3/$1'
+    ));
+    return date.getTime();
+  }
+
+  var axes_obj =
+  {
+    x: {
+      ticker: Dygraph.dateTicker,
+      axisLabelFormatter: function(x) {
+        return dateFormat(new Date(x));
       },
-      axes: {
-        x: {
-          ticker: Dygraph.dateTicker,
-          axisLabelFormatter: function(x) {
-            return dateFormat(new Date(x));
-          },
-          valueFormatter: function(x) {
-            return dateFormat(new Date(x));
-          }
+      valueFormatter: function(x) {
+        return dateFormat(new Date(x));
         }
-      },
+      }
+   }
+
+  var g1 = new Dygraph(
+    document.getElementById("graphdiv1"),
+    "exhaust_in.log",
+    {
+      xValueParser: dateParse,
+      axes: axes_obj,
       labelsDivWidth: 310,
       rollPeriod: 30,
       strokeWidth: 2.0,
+      title: "Exhaust in",
       labels: ['Date','Humidity (%)','Temp (&deg;C)']
     }
   );
+
+  var g2 = new Dygraph(
+    document.getElementById("graphdiv2"),
+    "exhaust_out.log",
+    {
+      xValueParser: dateParse,
+      axes: axes_obj,
+      labelsDivWidth: 310,
+      rollPeriod: 30,
+      strokeWidth: 2.0,
+      title: "Exhaust out",
+      labels: ['Date','Humidity (%)','Temp (&deg;C)']
+    }
+  );
+
+  var g3 = new Dygraph(
+    document.getElementById("graphdiv3"),
+    "intake_in.log",
+    {
+      xValueParser: dateParse,
+      axes: axes_obj,
+      labelsDivWidth: 310,
+      rollPeriod: 30,
+      strokeWidth: 2.0,
+      title: "Intake in",
+      labels: ['Date','Humidity (%)','Temp (&deg;C)']
+    }
+  );
+
+  var g4 = new Dygraph(
+    document.getElementById("graphdiv4"),
+    "intake_out.log",
+    {
+      xValueParser: dateParse,
+      axes: axes_obj,
+      labelsDivWidth: 310,
+      rollPeriod: 30,
+      strokeWidth: 2.0,
+      title: "Intake out",
+      labels: ['Date','Humidity (%)','Temp (&deg;C)']
+    }
+  );
+
+  var g5 = new Dygraph(
+    document.getElementById("graphdiv5"),
+    "loft.log",
+    {
+      xValueParser: dateParse,
+      axes: axes_obj,
+      labelsDivWidth: 310,
+      rollPeriod: 30,
+      strokeWidth: 2.0,
+      title: "Loft",
+      labels: ['Date','Humidity (%)','Temp (&deg;C)']
+    }
+  );
+
 </script>
 </body>
 </html>
